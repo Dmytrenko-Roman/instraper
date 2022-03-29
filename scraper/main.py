@@ -1,4 +1,5 @@
 import time
+from typing import NoReturn
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -15,9 +16,14 @@ def set_up_driver() -> webdriver:
 	driver.get('https://www.instagram.com/')
 	return driver
 
-# Instagram Login:
+def not_now_dismiss(driver: webdriver) -> WebDriverWait:
+	return WebDriverWait(driver, 10).until(
+		EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Не зараз")]'))
+	).click()
 
-def instagram_log_in(driver: webdriver):
+def instagram_scraping(driver: webdriver) -> NoReturn:
+	# Instagram Login:
+
 	username_input_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'input[name="username"]')))
 	password_input_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'input[name="password"]')))
 
@@ -29,12 +35,12 @@ def instagram_log_in(driver: webdriver):
 	
 	log_in_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[type="submit"]'))).click()
 
-#
+	# Dismissing pop up messages:
+
+	not_now_save_data_button = not_now_dismiss(driver)
+	not_now_notification_button = not_now_dismiss(driver)
 
 
 if __name__ == '__main__':
 	driver = set_up_driver()
-	instagram_log_in(driver)
-	time.sleep(5)
-	driver.close()
-	driver.quit()
+	instagram_scraping(driver)
