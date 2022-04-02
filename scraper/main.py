@@ -50,6 +50,13 @@ def instagram_scraping(driver: webdriver) -> NoReturn:
 	keyword_link = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, '/" + keyword[1:] + "/')]")))
 	keyword_link.click()
 
+	# Scrolling down:
+
+	# number_of_scrolls = 2
+	# for i in range(0, number_of_scrolls):
+	# 	driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+	# 	time.sleep(5)
+
 
 if __name__ == '__main__':
 	driver = set_up_driver()
