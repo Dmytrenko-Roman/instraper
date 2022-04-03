@@ -50,10 +50,23 @@ class Instraper():
 		keyword_link = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, '/" + keyword[1:] + "/')]")))
 		keyword_link.click()
 
+		# Trying to get data of each post:
+
+		time.sleep(5)
+		all_posts = driver.find_elements_by_tag_name('a')
+		all_posts_links = []
+		for post in all_posts:
+			all_posts_links.append(post.get_attribute('href'))
+
+		print(all_posts_links)
+
 		time.sleep(5)
 		post_link = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, '/p/')]")))
 		post_link.click()
-		print(post_link)
+
+		time.sleep(5)
+		close_the_post = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'wpO6b  ')]")))
+		close_the_post.click()
 
 		# Scrolling down:
 
