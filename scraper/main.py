@@ -58,12 +58,12 @@ class Instraper():
 		for post in all_posts:
 			post_link = post.get_attribute('href')
 			if '/p/' in post_link:
-				all_posts_links.append(post_link)
+				all_posts_links.append(post_link.split('.com', 1)[1])
 
 		print(all_posts_links)
 
 		time.sleep(5)
-		post_link = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, '/p/')]")))
+		post_link = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, f"//a[contains(@href, '{all_posts_links[0]}')]")))
 		post_link.click()
 
 		time.sleep(5)
