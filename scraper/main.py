@@ -53,10 +53,12 @@ class Instraper():
 		# Trying to get data of each post:
 
 		time.sleep(5)
-		all_posts = driver.find_elements_by_tag_name('a')
+		all_posts = driver.find_elements(By.TAG_NAME, 'a')
 		all_posts_links = []
 		for post in all_posts:
-			all_posts_links.append(post.get_attribute('href'))
+			post_link = post.get_attribute('href')
+			if '/p/' in post_link:
+				all_posts_links.append(post_link)
 
 		print(all_posts_links)
 
