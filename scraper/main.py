@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 from config import settings
-from models import PostModel
+from database import post_collection
 
 
 class Instraper():
@@ -24,7 +24,7 @@ class Instraper():
 			EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Не зараз")]'))
 		).click()
 
-	def scraping_data_by_hashtag(self, driver: webdriver, keyword: str) -> NoReturn:
+	def scraping_data_by_hashtag(self, driver: webdriver, keyword: str, limit: int) -> NoReturn:
 		# Instagram Login:
 
 		username_input_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'input[name="username"]')))
@@ -61,34 +61,32 @@ class Instraper():
 			if '/p/' in post_link:
 				all_posts_links.append(post_link.split('.com', 1)[1])
 
-		new_post_info = PostModel()
-		all_posts_info = []
-
-		i = 0
+		post_counter = 0
 		for link in all_posts_links:
 			time.sleep(5)
 			post_link = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, f"//a[contains(@href, '{link}')]")))
 			post_link.click()
 
 			time.sleep(5)
-			new_post_info.owner = driver.find_element(By.XPATH, "//a[contains(@class, 'sqdOP yWX7d     _8A5w5   ZIAjV ')]").text
-			new_post_info.text = driver.find_element(By.XPATH, "//span[contains(@class, '_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')]").text
+			post_owner = driver.find_element(By.XPATH, "//a[contains(@class, 'sqdOP yWX7d     _8A5w5   ZIAjV ')]").text
+			post_description = driver.find_element(By.XPATH, "//span[contains(@class, '_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')]").text
 
-			all_posts_info.append({new_post_info.owner: new_post_info.text})
+			post_collection.create_post(post_owner, post_description)
 
 			time.sleep(5)
 			close_the_post = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'wpO6b  ')]")))
 			close_the_post.click()
 
-			# Temporary if-statement:
+			# Limiting the posts:
 
-			i += 1
-			if i == 2:
+			post_counter += 1
+			if post_counter == limit:
 				break
 
 
 if __name__ == '__main__':
 	keyword = '#z'
+	limit_of_posts = 6
 	new_scrapper = Instraper()
 	driver = new_scrapper.set_up_driver()
-	new_scrapper.scraping_data_by_hashtag(driver, keyword)
+	new_scrapper.scraping_data_by_hashtag(driver, keyword, limit_of_posts)
