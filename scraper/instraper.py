@@ -68,9 +68,11 @@ class Instraper():
 
 			time.sleep(5)
 			post_owner = driver.find_element(By.XPATH, "//a[contains(@class, 'sqdOP yWX7d     _8A5w5   ZIAjV ')]").text
+			post_owner_url = driver.find_element(By.XPATH, "//a[contains(@class, 'sqdOP yWX7d     _8A5w5   ZIAjV ')]").get_attribute('href')
 			post_description = driver.find_element(By.XPATH, "//span[contains(@class, '_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')]").text
+			post_image_url = driver.find_element(By.XPATH, "//img[contains(@class, 'FFVAD')]").get_attribute('src')
 
-			post_collection.create_post(post_owner, post_description)
+			post_collection.create_post(post_owner, post_owner_url, post_description, post_image_url)
 
 			time.sleep(5)
 			close_the_post = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'wpO6b  ')]")))

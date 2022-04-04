@@ -8,7 +8,7 @@ from config import settings
 
 
 class MongoDB:
-	def __init__(self, connection_string: str, db_name: str, collection_name: str) -> NoReturn:
+	def __init__(self, connection_string: str, db_name: str, collection_name: str):
 		self.connection_string = connection_string
 		self.cluster = MongoClient(self.connection_string)
 		self.db = self.cluster[db_name]
@@ -16,13 +16,16 @@ class MongoDB:
 
 
 class PostCollection(MongoDB):
-	def create_post(self, post_owner: str, post_description: str):
+	def create_post(self, post_owner: str, post_owner_url: str, post_description: str, post_image_url: str):
 		post = {
 			'owner': post_owner,
+			'owner_url': post_owner_url,
 			'description': post_description,
+			'image_url': post_image_url,
 		}
 
 		self.collection.insert_one(post)
+
 
 CONNECTION_STRING = f'mongodb+srv://{settings.database_username}:{settings.database_password}@cluster0.slvzn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
