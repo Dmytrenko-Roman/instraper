@@ -24,10 +24,6 @@ class PostCollection(MongoDB):
 
 		self.collection.insert_one(post)
 
+CONNECTION_STRING = f'mongodb+srv://{settings.database_username}:{settings.database_password}@cluster0.slvzn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
-	
-
-
-connection_string = f'mongodb+srv://{settings.database_username}:{settings.database_password}@cluster0.slvzn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-
-post_collection = PostCollection(connection_string=connection_string, db_name='instraper', collection_name='post')
+post_collection = PostCollection(connection_string=CONNECTION_STRING, db_name='instraper', collection_name='post')
