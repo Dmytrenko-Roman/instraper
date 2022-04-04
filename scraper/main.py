@@ -12,6 +12,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 from config import settings
 
 
+class PostInfo():
+	owner: str
+	text: str
+
+
 class Instraper():
 	def set_up_driver(self) -> webdriver:
 		driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -60,15 +65,30 @@ class Instraper():
 			if '/p/' in post_link:
 				all_posts_links.append(post_link.split('.com', 1)[1])
 
-		print(all_posts_links)
+		new_post_info = PostInfo()
+		all_posts_info = []
 
-		time.sleep(5)
-		post_link = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, f"//a[contains(@href, '{all_posts_links[0]}')]")))
-		post_link.click()
+		i = 0
+		for link in all_posts_links:
+			time.sleep(5)
+			post_link = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, f"//a[contains(@href, '{link}')]")))
+			post_link.click()
 
-		time.sleep(5)
-		close_the_post = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'wpO6b  ')]")))
-		close_the_post.click()
+			time.sleep(5)
+			new_post_info.owner = driver.find_element(By.XPATH, "//a[contains(@class, 'sqdOP yWX7d     _8A5w5   ZIAjV ')]").text
+			new_post_info.text = driver.find_element(By.XPATH, "//span[contains(@class, '_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')]").text
+
+			all_posts_info.append({new_post_info.owner: new_post_info.text})
+
+			time.sleep(5)
+			close_the_post = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'wpO6b  ')]")))
+			close_the_post.click()
+
+			i += 1
+			if i == 2:
+				break
+
+		print(all_posts_info)
 
 		# Scrolling down:
 
