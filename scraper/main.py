@@ -10,11 +10,7 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 from config import settings
-
-
-class PostInfo():
-	owner: str
-	text: str
+from models import PostModel
 
 
 class Instraper():
@@ -65,7 +61,7 @@ class Instraper():
 			if '/p/' in post_link:
 				all_posts_links.append(post_link.split('.com', 1)[1])
 
-		new_post_info = PostInfo()
+		new_post_info = PostModel()
 		all_posts_info = []
 
 		i = 0
@@ -84,18 +80,11 @@ class Instraper():
 			close_the_post = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'wpO6b  ')]")))
 			close_the_post.click()
 
+			# Temporary if-statement:
+
 			i += 1
 			if i == 2:
 				break
-
-		print(all_posts_info)
-
-		# Scrolling down:
-
-		# number_of_scrolls = 2
-		# for i in range(0, number_of_scrolls):
-		# 	driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-		# 	time.sleep(5)
 
 
 if __name__ == '__main__':
