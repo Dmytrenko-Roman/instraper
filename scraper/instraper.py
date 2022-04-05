@@ -1,5 +1,4 @@
 import time
-from typing import NoReturn
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -29,9 +28,13 @@ class Instraper:
             .click()
         )
 
+    def check_owner_location(self) -> bool:
+        return True
+
+
     def scraping_data_by_hashtag(
         self, driver: webdriver, keyword: str, limit: int
-    ) -> NoReturn:
+    ) -> None:
         # Instagram Login:
 
         username_input_field = WebDriverWait(driver, 10).until(
@@ -62,7 +65,9 @@ class Instraper:
         )
         search_input_field.clear()
         search_input_field.send_keys(keyword)
+
         time.sleep(5)
+
         keyword_link = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, "//a[contains(@class, '-qQT3')]")
@@ -73,6 +78,7 @@ class Instraper:
         # Trying to get data of each post:
 
         time.sleep(5)
+
         all_posts = driver.find_elements(By.TAG_NAME, "a")
         all_posts_links = []
         post_counter = 0
@@ -89,6 +95,7 @@ class Instraper:
 
         for link in all_posts_links:
             time.sleep(5)
+
             post_link = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable(
                     (By.XPATH, f"//a[contains(@href, '{link}')]")
@@ -97,9 +104,18 @@ class Instraper:
             post_link.click()
 
             time.sleep(5)
+
             post_owner = driver.find_element(
                 By.XPATH, "//a[contains(@class, 'sqdOP yWX7d     _8A5w5   ZIAjV ')]"
             ).text
+
+            try:
+                post_owner_location = driver.find_element(
+                    By.XPATH, "//a[contains(@class, 'O4GlU')]"
+                ).text
+            except:
+                post_owner_location = None
+
             post_owner_url = driver.find_element(
                 By.XPATH, "//a[contains(@class, 'sqdOP yWX7d     _8A5w5   ZIAjV ')]"
             ).get_attribute("href")
@@ -112,10 +128,15 @@ class Instraper:
             ).get_attribute("src")
 
             post_collection.create_post(
-                post_owner, post_owner_url, post_description, post_image_url
+                post_owner,
+                post_owner_location,
+                post_owner_url,
+                post_description, 
+                post_image_url
             )
 
             time.sleep(5)
+
             close_the_post = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable(
                     (By.XPATH, "//button[contains(@class, 'wpO6b  ')]")
