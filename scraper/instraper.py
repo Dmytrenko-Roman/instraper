@@ -65,7 +65,7 @@ class Instraper:
         time.sleep(5)
         keyword_link = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//a[contains(@href, '/" + keyword[1:] + "/')]")
+                (By.XPATH, "//a[contains(@class, '-qQT3')]")
             )
         )
         keyword_link.click()
