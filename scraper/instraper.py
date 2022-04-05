@@ -28,7 +28,7 @@ class Instraper:
             .click()
         )
 
-    def check_owner_location(self) -> bool:
+    def check_owner_location(self, owner_location: str) -> bool:
         return True
 
     def scraping_data_by_hashtag(
@@ -124,13 +124,15 @@ class Instraper:
                 By.XPATH, "//img[contains(@class, 'FFVAD')]"
             ).get_attribute("src")
 
-            post_collection.create_post(
-                post_owner,
-                post_owner_location,
-                post_owner_url,
-                post_description,
-                post_image_url,
-            )
+            if self.check_owner_location():
+
+                post_collection.create_post(
+                    post_owner,
+                    post_owner_location,
+                    post_owner_url,
+                    post_description,
+                    post_image_url,
+                )
 
             time.sleep(5)
 
