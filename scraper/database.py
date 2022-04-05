@@ -4,7 +4,9 @@ from config import settings
 
 
 class MongoDB:
-    def __init__(self, connection_string: str, db_name: str, collection_name: str) -> None:
+    def __init__(
+        self, connection_string: str, db_name: str, collection_name: str
+    ) -> None:
         self.connection_string = connection_string
         self.cluster = MongoClient(self.connection_string)
         self.db = self.cluster[db_name]
@@ -15,7 +17,6 @@ class PostCollection(MongoDB):
     def get_post(self, post_dict: dict) -> dict:
         return self.collection.find_one(post_dict)
 
-
     def create_post(
         self,
         post_owner: str,
@@ -25,7 +26,6 @@ class PostCollection(MongoDB):
         post_image_url: str,
     ) -> None:
         post_to_verify = self.get_post({"description": post_description})
-
 
         if not post_to_verify:
             post = {

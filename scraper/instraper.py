@@ -31,7 +31,6 @@ class Instraper:
     def check_owner_location(self) -> bool:
         return True
 
-
     def scraping_data_by_hashtag(
         self, driver: webdriver, keyword: str, limit: int
     ) -> None:
@@ -69,9 +68,7 @@ class Instraper:
         time.sleep(5)
 
         keyword_link = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//a[contains(@class, '-qQT3')]")
-            )
+            EC.element_to_be_clickable((By.XPATH, "//a[contains(@class, '-qQT3')]"))
         )
         keyword_link.click()
 
@@ -131,8 +128,8 @@ class Instraper:
                 post_owner,
                 post_owner_location,
                 post_owner_url,
-                post_description, 
-                post_image_url
+                post_description,
+                post_image_url,
             )
 
             time.sleep(5)
