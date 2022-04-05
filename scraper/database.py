@@ -1,7 +1,5 @@
 from typing import NoReturn
-from h11 import Data
 
-import pymongo
 from pymongo import MongoClient
 
 from config import settings
@@ -16,6 +14,10 @@ class MongoDB:
 
 
 class PostCollection(MongoDB):
+    def get_post(self, post_dict):
+        return self.collection.find_one(post_dict)
+
+
     def create_post(
         self,
         post_owner: str,
@@ -23,18 +25,21 @@ class PostCollection(MongoDB):
         post_description: str,
         post_image_url: str,
     ):
-        post = {
-            "owner": post_owner,
-            "owner_url": post_owner_url,
-            "description": post_description,
-            "image_url": post_image_url,
-        }
+        post_to_verify = self.get_post({"description": post_description})
 
-        self.collection.insert_one(post)
+
+        if not post_to_verify:
+            post = {
+                "owner": post_owner,
+                "owner_url": post_owner_url,
+                "description": post_description,
+                "image_url": post_image_url,
+            }
+
+            self.collection.insert_one(post)
 
 
 CONNECTION_STRING = f"mongodb+srv://{settings.database_username}:{settings.database_password}@cluster0.slvzn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-
 post_collection = PostCollection(
     connection_string=CONNECTION_STRING, db_name="instraper", collection_name="post"
 )
