@@ -1,4 +1,5 @@
 import time
+import json
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -12,9 +13,11 @@ from database import post_collection
 
 
 class Instraper:
-    def set_up_driver(self) -> webdriver:
+    cities_filename = "../cities.txt"
+
+    def set_up_driver(self, url: str) -> webdriver:
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-        driver.get(url="https://www.instagram.com/")
+        driver.get(url)
         return driver
 
     def not_now_dismiss(self, driver: webdriver) -> WebDriverWait:
@@ -30,6 +33,18 @@ class Instraper:
 
     def check_owner_location(self, owner_location: str) -> bool:
         return True
+
+    def scraping_cities_by_country_name(self, driver: webdriver) -> None:
+        cities_array = []
+        cities = driver.find_elements(
+            By.XPATH, "//a[contains(@class, 'aMwHK')]"
+        )
+
+        for city in cities:
+            cities_array.append(city.text)
+
+        with open('../cities.txt', 'w') as fw:
+            json.dump(cities_array, fw)
 
     def scraping_data_by_hashtag(
         self, driver: webdriver, keyword: str, limit: int
