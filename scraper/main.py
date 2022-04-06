@@ -7,8 +7,8 @@ if __name__ == "__main__":
     # driver = new_scrapper.set_up_driver("https://www.instagram.com/")
     # new_scrapper.scraping_data_by_hashtag(driver, keyword, limit_of_posts)
 
-    print(new_scrapper.check_owner_location("Vinnytsia"))
+    # print(new_scrapper.check_owner_location("Vinnytsia"))
 
     # It's one time thing:
-    # driver_for_scraping_cities = new_scrapper.set_up_driver("https://www.instagram.com/explore/locations/UA/ukraine/")
-    # new_scrapper.scraping_cities_by_country_name(driver_for_scraping_cities)
+    driver_for_scraping_cities = new_scrapper.set_up_driver("https://www.instagram.com/explore/locations/UA/ukraine/")
+    new_scrapper.scraping_cities_by_country_name(driver_for_scraping_cities)

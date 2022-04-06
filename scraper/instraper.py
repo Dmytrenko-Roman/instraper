@@ -47,6 +47,7 @@ class Instraper:
 
         while True:
             try:
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 next_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable(
                         (By.XPATH, "//div[contains(@class, 'vLP4P')]")
