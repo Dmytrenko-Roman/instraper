@@ -13,7 +13,7 @@ from database import post_collection
 
 
 class Instraper:
-    cities_filename = "../cities.txt"
+    cities_filename = "cities.txt"
 
     def set_up_driver(self, url: str) -> webdriver:
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -35,16 +35,16 @@ class Instraper:
         return True
 
     def scraping_cities_by_country_name(self, driver: webdriver) -> None:
-        cities_array = []
+        cities_list = []
         cities = driver.find_elements(
             By.XPATH, "//a[contains(@class, 'aMwHK')]"
         )
 
         for city in cities:
-            cities_array.append(city.text)
+            cities_list.append(city.text)
 
-        with open('../cities.txt', 'w') as fw:
-            json.dump(cities_array, fw)
+        with open(self.cities_filename, 'w') as fw:
+            json.dump(cities_list, fw)
 
     def scraping_data_by_hashtag(
         self, driver: webdriver, keyword: str, limit: int
