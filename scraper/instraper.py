@@ -32,18 +32,37 @@ class Instraper:
         )
 
     def check_owner_location(self, owner_location: str) -> bool:
-        return True
+        with open(self.cities_filename, "r") as fr:
+            cities = json.load(fr)
+
+        result = False
+        for city in cities:
+            if city in owner_location:
+                result = True
+
+        return result
 
     def scraping_cities_by_country_name(self, driver: webdriver) -> None:
         cities_list = []
-        cities = driver.find_elements(
-            By.XPATH, "//a[contains(@class, 'aMwHK')]"
-        )
+
+        while True:
+            try:
+                next_button = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable(
+                        (By.XPATH, "//div[contains(@class, 'vLP4P')]")
+                    )
+                )
+                next_button.click()
+            except:
+                break
+            time.sleep(3)
+
+        cities = driver.find_elements(By.XPATH, "//a[contains(@class, 'aMwHK')]")
 
         for city in cities:
             cities_list.append(city.text)
 
-        with open(self.cities_filename, 'w') as fw:
+        with open(self.cities_filename, "w") as fw:
             json.dump(cities_list, fw)
 
     def scraping_data_by_hashtag(
