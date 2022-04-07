@@ -13,7 +13,7 @@ from database import post_collection
 
 
 class Instraper:
-    cities_filename = "cities.txt"
+    cities_filename = "../cities.txt"
 
     def set_up_driver(self, url: str) -> webdriver:
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
