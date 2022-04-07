@@ -37,7 +37,9 @@ class Instraper:
 
         result = False
         for city in cities:
-            if city in owner_location:
+            if owner_location is None:
+                result = False
+            elif city in owner_location:
                 result = True
 
         return result
@@ -118,6 +120,8 @@ class Instraper:
             post_link = post.get_attribute("href")
             if "/p/" in post_link:
                 all_posts_links.append(post_link.split(".com", 1)[1])
+            
+            # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
             # Limiting the posts:
 
@@ -159,7 +163,7 @@ class Instraper:
                 By.XPATH, "//img[contains(@class, 'FFVAD')]"
             ).get_attribute("src")
 
-            if self.check_owner_location():
+            if self.check_owner_location(post_owner_location):
 
                 post_collection.create_post(
                     post_owner,
