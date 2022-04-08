@@ -69,7 +69,7 @@ class Instraper:
             json.dump(cities_list, fw)
 
     def scraping_data_by_hashtag(
-        self, driver: webdriver, keyword: str, limit: int
+        self, driver: webdriver, keyword: str, scrolls_limit: int
     ) -> None:
         # Instagram Login:
 
@@ -113,21 +113,16 @@ class Instraper:
 
         time.sleep(5)
 
+        for scroll in range(0, scrolls_limit):
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(3)
+
         all_posts = driver.find_elements(By.TAG_NAME, "a")
         all_posts_links = []
-        post_counter = 0
         for post in all_posts:
             post_link = post.get_attribute("href")
             if "/p/" in post_link:
                 all_posts_links.append(post_link.split(".com", 1)[1])
-            
-            # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-            # Limiting the posts:
-
-            post_counter += 1
-            if post_counter == limit:
-                break
 
         for link in all_posts_links:
             time.sleep(5)
